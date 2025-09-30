@@ -26,6 +26,10 @@ end
 
 M.get_java_home = function()
 	local any_java_file = assert(find_any_java_file(), "No Java file found in the current directory.")
+	local filename = string.gsub(any_java_file, ".*/", "")
+	if filename == "module-info.java" then
+		vim.notify("Neotest-java does not support module-info.java! Remove or rename the file.", vim.log.levels.ERROR)
+	end
 	local bufnr = preload_file_for_lsp(any_java_file)
 	local uri = vim.uri_from_bufnr(bufnr)
 	local future = nio.control.future()
