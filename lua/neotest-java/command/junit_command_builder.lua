@@ -138,6 +138,7 @@ local CommandBuilder = {
 			)
 		end
 
+		logger.info("junit command: ", junit_command)
 		return junit_command
 	end,
 
