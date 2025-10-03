@@ -40,6 +40,8 @@ function SpecBuilder.build_spec(args, project_type, config)
 	-- make sure outputDir is created to operate in it
 	local output_dir = build_tool.get_output_dir()
 	local output_dir_parent = compatible_path(path:new(output_dir):parent().filename)
+	local app_name = vim.fn.fnamemodify(vim.fn.stdpath("config"), ":t")
+	local cp_file_location = vim.fn.stdpath("run") .. "/" .. app_name .. "/tmp_cp/" .. vim.fn.fnamemodify(root, ":t")
 
 	vim.uv.fs_mkdir(output_dir_parent, 493)
 	vim.uv.fs_mkdir(output_dir, 493)
@@ -81,7 +83,7 @@ function SpecBuilder.build_spec(args, project_type, config)
 	-- COMPILATION STEP
 	local compile_mode = ch.config().incremental_build and "incremental" or "full"
 	local classpath_file_arg =
-		compilers.jdtls.compile({ cwd = base_dir, classpath_file_dir = output_dir, compile_mode = compile_mode })
+		compilers.jdtls.compile({ cwd = base_dir, classpath_file_dir = cp_file_location, compile_mode = compile_mode })
 	command:classpath_file_arg(classpath_file_arg)
 
 	-- DAP STRATEGY
